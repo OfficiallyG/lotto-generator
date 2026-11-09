@@ -42,7 +42,7 @@ class App(ctk.CTk):
         self.btn_2.grid(row=2, column=0, padx=20, pady=10)
 
         # unfinished buttons
-        
+
         #self.btn_3 = ctk.CTkButton(
         #   self.sidebar_frame, text="Multi-Match", command=self.Multi_Match_pressed
         #)
@@ -77,7 +77,7 @@ class App(ctk.CTk):
 
         self.main_title = ctk.CTkLabel(
             self.main_frame,
-            text="Welcome to CustomTkinter",
+            text="Multi Lottery Number Generator",
             font=ctk.CTkFont(size=24, weight="bold"),
         )
         self.main_title.grid(row=0, column=0, padx=20, pady=20, sticky="w")
