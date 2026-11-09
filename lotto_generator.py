@@ -78,13 +78,13 @@ class App(ctk.CTk):
         self.main_title = ctk.CTkLabel(
             self.main_frame,
             text="Multi Lottery Number Generator",
-            font=ctk.CTkFont(size=24, weight="bold"),
+            font=ctk.CTkFont(size=24, weight="bold")
         )
         self.main_title.grid(row=0, column=0, padx=20, pady=20, sticky="w")
         self.main_number_display = ctk.CTkLabel(
             self.main_frame,
-            
-            font=ctk.CTkFont(size=24, weight="bold"),
+            text="",
+            font=ctk.CTkFont(size=24, weight="bold")
         )
         self.main_number_display.grid(row=1, column=0, padx=20, pady=20, sticky="w")
 
