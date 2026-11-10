@@ -15,15 +15,14 @@ class App(ctk.CTk):
 
         # Configure grid layout (1 row, 2 columns for a sidebar layout)
         self.grid_rowconfigure(0, weight=1)
-        self.grid_columnconfigure(1, weight=1)
+        self.grid_columnconfigure(0, weight=1)
 
         # --- Sidebar Frame ---
         self.sidebar_frame = ctk.CTkFrame(self, width=200, corner_radius=0)
         self.sidebar_frame.grid(row=0, column=0, sticky="nsew")
-        self.sidebar_frame.grid_rowconfigure(
-            4, weight=1
-        )  # Pushes bottom elements down
+        self.sidebar_frame.grid_rowconfigure(5, weight=0)
 
+        #sidebar for buttons
         self.sidebar_title = ctk.CTkLabel(
             self.sidebar_frame,
             text="Navigation",
@@ -31,29 +30,26 @@ class App(ctk.CTk):
         )
         self.sidebar_title.grid(row=0, column=0, padx=20, pady=20)
 
+        #buttons for each game
         self.btn_1 = ctk.CTkButton(
             self.sidebar_frame, text="Powerball", command=self.Powerball_pressed
         )
-        self.btn_1.grid(row=1, column=0, padx=20, pady=10)
+        self.btn_1.grid(row=1, column=0, padx=10, pady=10)
 
         self.btn_2 = ctk.CTkButton(
             self.sidebar_frame, text="Multi-Match", command=self.Multi_Match_pressed
         )
-        self.btn_2.grid(row=2, column=0, padx=20, pady=10)
+        self.btn_2.grid(row=2, column=0, padx=10, pady=10)
 
-        # unfinished buttons
+        self.btn_3 = ctk.CTkButton(
+            self.sidebar_frame, text="Mega Millions", command=self.Mega_Millions_pressed
+        )
+        self.btn_3.grid(row=3, column=0, padx=10, pady=10)
 
-        #self.btn_3 = ctk.CTkButton(
-        #   self.sidebar_frame, text="Multi-Match", command=self.Multi_Match_pressed
-        #)
-        #self.btn_3.grid(row=2, column=0, padx=20, pady=10)
-
-        #self.btn_4= ctk.CTkButton(
-        #    self.sidebar_frame, text="Multi-Match", command=self.Multi_Match_pressed
-        #)
-        #self.btn_4.grid(row=2, column=0, padx=20, pady=10)
-
-        
+        self.btn_4 = ctk.CTkButton(
+            self.sidebar_frame, text="Pick5", command=self.Pick5_Pressed
+        )
+        self.btn_4.grid(row=4, column=0, padx=10, pady=10)
 
         # Theme Switcher at the bottom of sidebar
         self.appearance_mode_label = ctk.CTkLabel(
@@ -74,6 +70,7 @@ class App(ctk.CTk):
         )
         self.main_frame.grid(row=0, column=1, sticky="nsew", padx=20, pady=20)
         self.main_frame.grid_columnconfigure(0, weight=1)
+        self.main_frame.grid_rowconfigure(0,weight=1)
 
         self.main_title = ctk.CTkLabel(
             self.main_frame,
@@ -81,34 +78,90 @@ class App(ctk.CTk):
             font=ctk.CTkFont(size=24, weight="bold")
         )
         self.main_title.grid(row=0, column=0, padx=20, pady=20, sticky="w")
-        self.main_number_display = ctk.CTkLabel(
+        self.main_number_display = ctk.CTkScrollableFrame(
             self.main_frame,
-            text="",
-            font=ctk.CTkFont(size=24, weight="bold")
+            fg_color="transparent",
+            width=400,
+            height=400,
         )
-        self.main_number_display.grid(row=1, column=0, padx=20, pady=20, sticky="w")
+        self.main_number_display.grid(row=1, column=0, padx=20, pady=20, sticky="nsew")
 
 
     # --- Callbacks / Event Handlers ---
-    def Powerball_pressed(self):
-        main_nums = random.sample(range(1,75),5)
-        power_play = random.randint(1,26)
+    def clear_display(self): # clear display before generating numbers
+        for widget in self.main_number_display.winfo_children():
+            widget.destroy()
 
-        text = " ".join(map(str,main_nums))
-        final_text = f"picks: {text} | Power Play: {power_play}"
-        self.main_number_display.configure(text=final_text)
+    def Powerball_pressed(self): # picks 5 numbers from 1-75 and a power play ball from 1-26
+        self.clear_display()
+        for i in range(1,28):
+            main_nums = random.sample(range(1,75),5)
+            power_play = random.randint(1,26)
+
+            text = "  ".join(f"{num:02d}" for num in main_nums)
+            final_text = f"Ticket {i}:   {text}   |   [ PB: {power_play:02d} ]"
+
+            row_label = ctk.CTkLabel(
+                self.main_number_display,
+                text=final_text,
+                font=ctk.CTkFont(family="Serif", size=18, weight="bold") # Courier matches widths evenly
+                )
+            row_label.pack(anchor="w",padx=20,pady=5)
 
     def Multi_Match_pressed(self):
-        main_nums = random.sample(range(1,75),5)
-        power_play = random.randint(1,26)
+        self.clear_display()
+        for i in range(1,4):
+            for j in range(1,4):
+                main_nums = random.sample(range(1,43),6)
+            
+                text = "  ".join(f"{num:02d}" for num in main_nums)
+                final_text = f"line {j}:   {text}"
+                
+                row_label = ctk.CTkLabel(
+                    self.main_number_display,
+                    text=final_text,
+                    font=ctk.CTkFont(family="Serif", size=18, weight="bold") # Courier matches widths evenly
+                    )
+                row_label.pack(anchor="w",padx=20,pady=5)
+
+            if i < 3:
+                line_break = ctk.CTkLabel(
+                    self.main_number_display,
+                    text="------------------------------------------------------",
+                    font=ctk.CTkFont(family="Serif", size=18, weight="bold"),
+                )
+                line_break.pack(anchor="w",padx=20,pady=5)
+
+
+    def Mega_Millions_pressed(self):
+        self.clear_display()
+        for i in range(1,28):
+            main_nums = random.sample(range(1,70),5)
+            mega_ball = random.randint(1,24)
         
-        text = " ".join(map(str,main_nums))
-        final_text = f"picks: {text} | Power Play: {power_play}"
-        self.main_number_display.configure(text=final_text)
+            text = "  ".join(f"{num:02d}" for num in main_nums)
+            final_text = f"Ticket {i}: {text} | Mega Ball: {mega_ball:02d}"
         
-    def action_btn_callback(self):
-        user_input = self.entry.get()
-        print(f"User entered: {user_input}")
+            row_label = ctk.CTkLabel(
+                self.main_number_display,
+                text=final_text,
+                font=ctk.CTkFont(family="Serif", size=18, weight="bold") # Courier matches widths evenly
+                )
+            row_label.pack(anchor="w",padx=20,pady=5)
+
+    def Pick5_Pressed(self):
+        self.clear_display()
+        for i in range(1,6):
+            main_nums = random.sample(range(1,9),5)
+            text = " ".join(f"{num}" for num in main_nums)
+            final_text = f"Ticket {i}: {text}"
+                
+            row_label = ctk.CTkLabel(
+                self.main_number_display,
+                text=final_text,
+                font=ctk.CTkFont(family="Serif", size=18, weight="bold") # Courier matches widths evenly
+            )
+            row_label.pack(anchor="w",padx=20,pady=5)
 
     def change_appearance_mode_callback(self, new_appearance_mode: str):
         ctk.set_appearance_mode(new_appearance_mode)
