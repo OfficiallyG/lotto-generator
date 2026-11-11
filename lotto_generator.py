@@ -145,7 +145,8 @@ class App(ctk.CTk):
             row_label = ctk.CTkLabel(
                 self.main_number_display,
                 text=final_text,
-                font=ctk.CTkFont(family="Serif", size=18, weight="bold") 
+                font=ctk.CTkFont(family="Serif", size=18, weight="bold")
+            )
             row_label.pack(anchor="w",padx=20,pady=5)
 
     def Pick5_Pressed(self):
